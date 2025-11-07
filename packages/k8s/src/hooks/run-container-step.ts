@@ -133,7 +133,7 @@ function createContainerSpec(
   podContainer.name = JOB_CONTAINER_NAME
   podContainer.image = container.image
   podContainer.workingDir = '/__w'
-  podContainer.command = ['/__e/tail']
+  podContainer.command = ['tail']
   podContainer.args = DEFAULT_CONTAINER_ENTRY_POINT_ARGS
 
   podContainer.volumeMounts = CONTAINER_VOLUMES
