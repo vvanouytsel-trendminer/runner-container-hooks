@@ -18,10 +18,6 @@ export const GITHUB_VOLUME_NAME = 'github'
 
 export const CONTAINER_VOLUMES: k8s.V1VolumeMount[] = [
   {
-    name: EXTERNALS_VOLUME_NAME,
-    mountPath: '/__e'
-  },
-  {
     name: GITHUB_VOLUME_NAME,
     mountPath: '/github'
   }
@@ -102,7 +98,6 @@ export function writeContainerStepScript(
 rm "$0" # remove script after running
 mv /__w/_temp/_github_home /github/home && \
 mv /__w/_temp/_github_workflow /github/workflow && \
-mv /__w/_temp/_runner_file_commands /github/file_commands && \
 mv /__w/${parts.join('/')}/ /github/workspace && \
 cd /github/workspace && \
 exec ${environmentPrefix} ${entryPoint} ${
