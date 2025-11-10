@@ -18,6 +18,10 @@ export const GITHUB_VOLUME_NAME = 'github'
 
 export const CONTAINER_VOLUMES: k8s.V1VolumeMount[] = [
   {
+    name: EXTERNALS_VOLUME_NAME,
+    mountPath: '/__e'
+  },
+  {
     name: GITHUB_VOLUME_NAME,
     mountPath: '/github'
   }
