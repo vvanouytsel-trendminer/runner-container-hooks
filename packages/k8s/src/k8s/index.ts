@@ -190,6 +190,10 @@ export async function createContainerStepPod(
 
   appPod.spec.volumes = [
     {
+      name: EXTERNALS_VOLUME_NAME,
+      emptyDir: {}
+    },
+    {
       name: GITHUB_VOLUME_NAME,
       emptyDir: {}
     }
