@@ -2,6 +2,12 @@ name: CD - Release new version
 
 on:
   workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch, tag, or commit to release from (default: main)'
+        required: false
+        default: 'main'
+        type: string
 
 permissions:
   contents: write
@@ -11,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.ref || 'main' }}
 
       - name: Install dependencies
         run: npm install
