@@ -72,6 +72,7 @@ jobs:
           gh release create v${{ steps.releaseVersion.outputs.result }} \
             --title "v${{ steps.releaseVersion.outputs.result }}" \
             --repo ${{ github.repository }} \
+            --target ${{ inputs.ref || 'main' }} \
             --notes-file ${{ github.workspace }}/finalReleaseNotes.md \
             --latest \
             ${{ github.workspace }}/actions-runner-hooks-k8s-${{ steps.releaseVersion.outputs.result }}.zip \
