@@ -437,7 +437,7 @@ export async function execCpToPod(
     }
   }
 
-  let attempts = 15
+  let attempts = 1
   const delay = 1000
   for (let i = 0; i < attempts; i++) {
     try {
@@ -534,7 +534,7 @@ export async function execCpFromPod(
     }
   }
 
-  let attempts = 15
+  let attempts = 1
   const delay = 1000
   for (let i = 0; i < attempts; i++) {
     try {
