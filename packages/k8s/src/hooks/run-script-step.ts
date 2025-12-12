@@ -23,6 +23,7 @@ export async function runScriptStep(
   )
 
   const workdir = dirname(process.env.RUNNER_WORKSPACE as string)
+  const containerWorkDir = '/__w'
   const containerTemp = '/__w/_temp'
   const runnerTemp = `${workdir}/_temp`
   await execCpToPod(state.jobPod, runnerTemp, containerTemp)
@@ -67,10 +68,29 @@ export async function runScriptStep(
 
   try {
     core.debug(
-      `Copying from job pod '${state.jobPod}' ${containerTemp} to ${runnerTemp}`
+      `Copying from job pod '${state.jobPod}' ${containerTemp}/_runner_file_commands to ${workdir}/_temp`
     )
-    await execCpFromPod(state.jobPod, containerTemp, workdir)
+    await execCpFromPod(
+      state.jobPod,
+      `${containerTemp}/_runner_file_commands`,
+      `${workdir}/_temp`
+    )
   } catch (error) {
-    core.warning('Failed to copy _temp from pod')
+    core.warning('Failed to copy ${containerTemp} back to runner')
+  }
+
+  try {
+    core.debug(
+      `Copying from job pod '${state.jobPod}' ${containerWorkDir} to ${workdir}`
+    )
+    await execCpFromPod(
+      state.jobPod,
+      `${containerWorkDir}`,
+      `${workdir}`
+    )
+  } catch (error) {
+    core.warning('Failed to copy ${containerWorkDir} back to runner')
   }
 }
+
+
