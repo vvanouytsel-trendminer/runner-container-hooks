@@ -2,6 +2,11 @@ name: CD - Release new version
 
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to release from (e.g., v0.7.0). Leave empty to use current branch.'
+        required: false
+        type: string
 
 permissions:
   contents: write
@@ -11,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+        with:
+          ref: ${{ inputs.tag || github.ref }}
 
       - uses: actions/setup-node@v6
         with:
