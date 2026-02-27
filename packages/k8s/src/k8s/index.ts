@@ -275,9 +275,17 @@ export async function execPodStep(
       resetPongTimeout(ws)
     })
 
+    // Handle WebSocket errors
+    ws.on('error', (err) => {
+      core.warning(`[Heartbeat] WebSocket error: ${err}`)
+    })
+
     // Cleanup on close
-    ws.on('close', () => {
-      core.debug('[Heartbeat] WebSocket closed, stopping heartbeat')
+    ws.on('close', (code, reason) => {
+      const reasonStr = reason ? reason.toString() : 'no reason provided'
+      core.warning(
+        `[Heartbeat] WebSocket closed (code=${code}, reason="${reasonStr}"), stopping heartbeat`
+      )
       stopHeartbeat()
     })
 
@@ -291,9 +299,14 @@ export async function execPodStep(
           ws.ping()
           core.debug('[Heartbeat] Ping sent')
         } catch (err) {
-          core.debug(`[Heartbeat] Ping failed: ${err}`)
+          core.warning(`[Heartbeat] Ping failed: ${err}`)
         }
       } else {
+        const readyStateNames = ['CONNECTING', 'OPEN', 'CLOSING', 'CLOSED']
+        const stateName = readyStateNames[ws.readyState] || 'UNKNOWN'
+        core.warning(
+          `[Heartbeat] WebSocket not in OPEN state (readyState=${ws.readyState}/${stateName}), stopping heartbeat`
+        )
         stopHeartbeat()
       }
     }, PING_PERIOD_MS)
